@@ -11,7 +11,7 @@ const App = () => {
 
   useEffect(() => {
     authFirebase.onAuthStateChanged( (response) => {
-      console.log('el response es  => ', response)
+      // console.log('el response es  => ', response)
       setUser(response)
     } )
 

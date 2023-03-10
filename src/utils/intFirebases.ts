@@ -1,5 +1,5 @@
 export interface addDocCumplesProps {
-    dateBirth: Date | undefined,
+    dateBirth: string | undefined,
     name: string,
     lastNames: string,
 }

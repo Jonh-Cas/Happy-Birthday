@@ -1,13 +1,8 @@
 import { StyleSheet, View, TextInput, Text, Pressable } from 'react-native';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from 'moment'
 import { addDocCumples } from '../utils/firebase';
-
-
-interface Props {
-
-}
 
 interface formDataProps {
     dateBirth: Date | undefined,
@@ -21,7 +16,8 @@ const intialForm = {
     lastNames: '',
 }
 
-const AddBirthday = ({ }: Props) => {
+
+const AddBirthday = ( ) => {
 
     const [formData, setFormData] = useState<formDataProps>(intialForm)
     const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
@@ -30,6 +26,8 @@ const AddBirthday = ({ }: Props) => {
         lastNames: false,
         dateBirth: false,
     })
+
+    
 
     const hideDatePicker = () => setIsDatePickerVisible(false);
 
@@ -65,7 +63,7 @@ const AddBirthday = ({ }: Props) => {
         error.dateBirth = false;
         let data = formData;
         data.dateBirth?.setFullYear(0);
-        addDocCumples(data)
+        addDocCumples({...data, dateBirth: moment(formData.dateBirth).format('LL') })
 
        }
        setFormError(error)
@@ -107,7 +105,7 @@ const AddBirthday = ({ }: Props) => {
 
             <DateTimePickerModal
                 isVisible={isDatePickerVisible}
-                mode="date"
+                mode='date'
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
             />

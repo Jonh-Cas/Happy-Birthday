@@ -1,8 +1,10 @@
 // Import the functions you need from the SDKs you need
 import { getApp, getApps, initializeApp } from "firebase/app";
 import { getAuth } from 'firebase/auth';
-import { addDoc, collection, getFirestore, Timestamp } from "firebase/firestore";
+import { addDoc, collection, Firestore, FirestoreSettings, getFirestore, initializeFirestore } from "firebase/firestore";
 import { addDocCumplesProps } from "./intFirebases";
+
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -31,13 +33,16 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const firebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-const authFirebase = getAuth(firebaseApp)
-const db = getFirestore(firebaseApp);
+const authFirebase  = getAuth(firebaseApp)
+const db = initializeFirestore(firebaseApp, {
+  experimentalForceLongPolling: true,
+});
 
+// console.log('este es el FireStore => ', Firestore)
+// console.log('este es el Settings => ', settings)
 
 const addDocCumples = (data: addDocCumplesProps) => {
-  const now = new Date();
-  new Timestamp(1631289143, 89000000);
+
   addDoc(
     collection(db, 'cumples'),
     { ...data }
