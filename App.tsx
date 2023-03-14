@@ -27,7 +27,7 @@ const App = () => {
     <SafeAreaView style={{ ...styles.background }} >
       {
         user
-        ? <ListBirthday />
+        ? <ListBirthday user={user}  />
         : <Auth />
       }
       

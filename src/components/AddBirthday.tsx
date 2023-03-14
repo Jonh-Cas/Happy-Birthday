@@ -1,13 +1,19 @@
 import { StyleSheet, View, TextInput, Text, Pressable } from 'react-native';
-import React, { useEffect, useState } from 'react'
+import React, { Dispatch, useEffect, useState } from 'react'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from 'moment'
-import { addDocCumples } from '../utils/firebase';
+import { User } from 'firebase/auth';
+import { addDocCumples } from '../utils/firestore';
 
 interface formDataProps {
     dateBirth: Date | undefined,
     name: string,
     lastNames: string,
+}
+
+interface Props{
+    user: User,
+    setShowList: Dispatch<React.SetStateAction<boolean>>
 }
 
 const intialForm = {
@@ -17,7 +23,7 @@ const intialForm = {
 }
 
 
-const AddBirthday = ( ) => {
+const AddBirthday = ({ user, setShowList }: Props) => {
 
     const [formData, setFormData] = useState<formDataProps>(intialForm)
     const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
@@ -27,8 +33,6 @@ const AddBirthday = ( ) => {
         dateBirth: false,
     })
 
-    
-
     const hideDatePicker = () => setIsDatePickerVisible(false);
 
     const handleConfirm = (date: Date) => {
@@ -37,7 +41,7 @@ const AddBirthday = ( ) => {
         dateBirth.setMinutes(0);
         dateBirth.setSeconds(0);
         setFormData({ ...formData, dateBirth })
-        console.log(moment(date).format('LL'))
+        // console.log(moment(date).format('LL'))
         hideDatePicker()
     }
 
@@ -62,8 +66,12 @@ const AddBirthday = ( ) => {
         error.lastNames = false; 
         error.dateBirth = false;
         let data = formData;
-        data.dateBirth?.setFullYear(0);
-        addDocCumples({...data, dateBirth: moment(formData.dateBirth).format('LL') })
+
+        addDocCumples(
+            user.uid,
+            {...data, dateBirth: formData.dateBirth },
+            setShowList
+            )
 
        }
        setFormError(error)
